@@ -1,566 +1,1290 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
-    <meta name="theme-color" content="#080b16">
+  <meta
+    name="description"
+    content="Naol Ethiopia TV Live - Watch live news, sports, entertainment and movie channels online."
+  >
 
-    <title>Naol Ethiopia TV Live</title>
+  <meta name="theme-color" content="#080d19">
 
-    <meta
-        name="description"
-        content="Watch Ethiopian television channels, explore live broadcasts and manage your premium subscription."
-    >
+  <title>Naol Ethiopia TV Live</title>
 
-    <link rel="stylesheet" href="style.css">
+  <style>
+    /* =====================================================
+       NAOL ETHIOPIA TV LIVE
+       Responsive dark 3D television website
+       ===================================================== */
+
+    :root {
+      --background: #080d19;
+      --surface: #101a2d;
+      --surface-light: #17243b;
+      --border: rgba(255, 255, 255, 0.09);
+      --text: #f4f7ff;
+      --muted: #9eabc3;
+      --primary: #42e8c5;
+      --primary-dark: #12ad98;
+      --red: #ff405d;
+      --gold: #ffca68;
+      --shadow: 0 18px 45px rgba(0, 0, 0, 0.3);
+      --radius: 20px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(
+          circle at 10% 0%,
+          rgba(32, 105, 139, 0.19),
+          transparent 35%
+        ),
+        radial-gradient(
+          circle at 100% 20%,
+          rgba(86, 58, 159, 0.15),
+          transparent 35%
+        ),
+        var(--background);
+      font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+      line-height: 1.5;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(1200px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    /* HEADER */
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(8, 13, 25, 0.92);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-inner {
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .brand-logo {
+      width: 48px;
+      height: 48px;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      border-radius: 15px;
+      color: #061510;
+      font-size: 24px;
+      font-weight: 900;
+      background: linear-gradient(
+        145deg,
+        #78ffe0,
+        #1dc4a8
+      );
+      box-shadow:
+        0 8px 24px rgba(66, 232, 197, 0.2),
+        inset 0 2px 3px rgba(255, 255, 255, 0.4);
+    }
+
+    .brand-name {
+      font-size: 19px;
+      font-weight: 900;
+      letter-spacing: -0.6px;
+    }
+
+    .brand-subtitle {
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+    }
+
+    .header-live {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 13px;
+      border: 1px solid rgba(255, 64, 93, 0.3);
+      border-radius: 999px;
+      background: rgba(255, 64, 93, 0.09);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      background: var(--red);
+      box-shadow: 0 0 12px rgba(255, 64, 93, 0.7);
+      animation: pulse 1.4s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.55;
+        transform: scale(0.82);
+      }
+    }
+
+    /* HERO */
+
+    .hero {
+      padding: 60px 0 34px;
+    }
+
+    .hero-content {
+      max-width: 760px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 17px;
+      padding: 8px 12px;
+      border: 1px solid rgba(66, 232, 197, 0.23);
+      border-radius: 999px;
+      background: rgba(66, 232, 197, 0.07);
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .hero h1 {
+      max-width: 740px;
+      font-size: clamp(34px, 6vw, 65px);
+      font-weight: 950;
+      line-height: 1.05;
+      letter-spacing: -2.2px;
+    }
+
+    .hero h1 span {
+      color: var(--primary);
+      text-shadow: 0 0 35px rgba(66, 232, 197, 0.13);
+    }
+
+    .hero-description {
+      max-width: 630px;
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.8;
+    }
+
+    .hero-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 25px;
+    }
+
+    .stat-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.035);
+      color: #dce5f6;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .stat-pill strong {
+      color: var(--primary);
+    }
+
+    /* MAIN PLAYER */
+
+    .player-section {
+      padding: 20px 0 48px;
+      scroll-margin-top: 100px;
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 19px;
+    }
+
+    .section-heading h2 {
+      font-size: clamp(22px, 4vw, 30px);
+      font-weight: 900;
+      letter-spacing: -0.8px;
+    }
+
+    .section-heading p {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .player-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--red);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 1px;
+    }
+
+    .player-shell {
+      overflow: hidden;
+      border: 1px solid rgba(66, 232, 197, 0.22);
+      border-radius: var(--radius);
+      background: #03060c;
+      box-shadow:
+        var(--shadow),
+        0 0 40px rgba(66, 232, 197, 0.045);
+    }
+
+    .player-screen {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      min-height: 200px;
+      background:
+        radial-gradient(
+          circle at center,
+          #15233b,
+          #050912 70%
+        );
+    }
+
+    .player-screen iframe {
+      display: block;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      inset: 0;
+      border: 0;
+      background: #03060c;
+    }
+
+    .player-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 25px;
+      text-align: center;
+      pointer-events: none;
+    }
+
+    .placeholder-content {
+      max-width: 400px;
+    }
+
+    .placeholder-icon {
+      display: grid;
+      place-items: center;
+      width: 75px;
+      height: 75px;
+      margin: 0 auto 18px;
+      border: 1px solid rgba(66, 232, 197, 0.3);
+      border-radius: 24px;
+      background: rgba(66, 232, 197, 0.08);
+      color: var(--primary);
+      font-size: 30px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .placeholder-content h3 {
+      margin-bottom: 8px;
+      font-size: clamp(20px, 4vw, 27px);
+      font-weight: 900;
+    }
+
+    .placeholder-content p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .player-details {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 15px;
+      padding: 19px 22px;
+      border-top: 1px solid var(--border);
+      background: linear-gradient(
+        135deg,
+        #111d31,
+        #0b1323
+      );
+    }
+
+    .now-playing-label {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .player-title {
+      margin-top: 4px;
+      font-size: 19px;
+      font-weight: 900;
+    }
+
+    .player-subtitle {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .player-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+    }
+
+    .action-button {
+      min-height: 42px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 15px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 800;
+      transition:
+        transform 0.2s,
+        background 0.2s;
+    }
+
+    .action-button:hover {
+      transform: translateY(-2px);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .action-button.primary {
+      border-color: transparent;
+      background: linear-gradient(
+        135deg,
+        var(--primary),
+        var(--primary-dark)
+      );
+      color: #031610;
+    }
+
+    /* CHANNEL SECTION */
+
+    .channels-section {
+      padding: 15px 0 70px;
+    }
+
+    .channels-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 22px;
+    }
+
+    .search-box {
+      position: relative;
+      width: min(100%, 350px);
+    }
+
+    .search-box input {
+      width: 100%;
+      min-height: 48px;
+      padding: 12px 16px 12px 44px;
+      outline: none;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: var(--surface);
+      color: var(--text);
+      transition: border-color 0.2s;
+    }
+
+    .search-box input:focus {
+      border-color: rgba(66, 232, 197, 0.6);
+    }
+
+    .search-box input::placeholder {
+      color: #7e8ba4;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      pointer-events: none;
+    }
+
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .filter-button {
+      min-height: 40px;
+      padding: 9px 13px;
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      background: var(--surface);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      transition: 0.2s;
+    }
+
+    .filter-button:hover,
+    .filter-button.active {
+      border-color: rgba(66, 232, 197, 0.4);
+      background: rgba(66, 232, 197, 0.1);
+      color: var(--primary);
+    }
+
+    .channel-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .channel-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 20px;
+      min-width: 0;
+      padding: 20px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: linear-gradient(
+        145deg,
+        rgba(23, 36, 59, 0.95),
+        rgba(13, 22, 38, 0.98)
+      );
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+      transition:
+        transform 0.22s,
+        border-color 0.22s,
+        box-shadow 0.22s;
+    }
+
+    .channel-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        var(--primary),
+        transparent
+      );
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .channel-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(66, 232, 197, 0.35);
+      box-shadow: 0 18px 35px rgba(0, 0, 0, 0.22);
+    }
+
+    .channel-card:hover::before,
+    .channel-card.active::before {
+      opacity: 1;
+    }
+
+    .channel-card.active {
+      border-color: rgba(66, 232, 197, 0.45);
+      background: linear-gradient(
+        145deg,
+        rgba(27, 57, 67, 0.95),
+        rgba(13, 25, 42, 0.98)
+      );
+    }
+
+    .channel-card-content {
+      display: flex;
+      align-items: flex-start;
+      gap: 13px;
+    }
+
+    .channel-number {
+      width: 43px;
+      height: 43px;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(66, 232, 197, 0.18);
+      border-radius: 13px;
+      background: rgba(66, 232, 197, 0.08);
+      color: var(--primary);
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .channel-info {
+      min-width: 0;
+      padding-top: 2px;
+    }
+
+    .channel-info h3 {
+      overflow-wrap: anywhere;
+      font-size: 16px;
+      font-weight: 900;
+      line-height: 1.35;
+    }
+
+    .channel-info p {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: 11px;
+      color: #ff788c;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 1px;
+    }
+
+    .live-badge .live-dot {
+      width: 6px;
+      height: 6px;
+    }
+
+    .watch-live-btn {
+      width: 100%;
+      min-height: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      border: 1px solid rgba(66, 232, 197, 0.24);
+      border-radius: 12px;
+      background: rgba(66, 232, 197, 0.09);
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.5px;
+      transition:
+        background 0.2s,
+        color 0.2s,
+        transform 0.2s;
+    }
+
+    .watch-live-btn:hover {
+      transform: translateY(-1px);
+      background: var(--primary);
+      color: #061710;
+    }
+
+    .empty-state {
+      grid-column: 1 / -1;
+      padding: 45px 20px;
+      border: 1px dashed var(--border);
+      border-radius: 16px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    /* NOTICE */
+
+    .notice {
+      display: flex;
+      align-items: flex-start;
+      gap: 13px;
+      margin-bottom: 45px;
+      padding: 17px 19px;
+      border: 1px solid rgba(255, 202, 104, 0.19);
+      border-radius: 15px;
+      background: rgba(255, 202, 104, 0.045);
+    }
+
+    .notice-icon {
+      color: var(--gold);
+      font-size: 20px;
+    }
+
+    .notice h3 {
+      margin-bottom: 4px;
+      color: var(--gold);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .notice p {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.8;
+    }
+
+    /* FOOTER */
+
+    .site-footer {
+      padding: 30px 0;
+      border-top: 1px solid var(--border);
+      background: rgba(3, 7, 14, 0.45);
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .footer-brand {
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .footer-text {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .footer-tag {
+      color: var(--primary);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+
+    /* RESPONSIVE */
+
+    @media (max-width: 900px) {
+      .channel-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .hero {
+        padding-top: 45px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        width: calc(100% - 24px);
+      }
+
+      .header-inner {
+        min-height: 68px;
+      }
+
+      .brand-logo {
+        width: 42px;
+        height: 42px;
+        border-radius: 13px;
+        font-size: 21px;
+      }
+
+      .brand-name {
+        font-size: 15px;
+      }
+
+      .brand-subtitle {
+        font-size: 9px;
+        letter-spacing: 1px;
+      }
+
+      .header-live {
+        padding: 8px 10px;
+        font-size: 10px;
+      }
+
+      .hero {
+        padding: 38px 0 25px;
+      }
+
+      .hero h1 {
+        letter-spacing: -1.3px;
+      }
+
+      .hero-description {
+        font-size: 14px;
+      }
+
+      .hero-stats {
+        gap: 8px;
+      }
+
+      .stat-pill {
+        padding: 8px 10px;
+        font-size: 11px;
+      }
+
+      .player-section {
+        padding-bottom: 35px;
+      }
+
+      .player-screen {
+        min-height: 190px;
+      }
+
+      .player-details {
+        padding: 15px;
+      }
+
+      .player-title {
+        font-size: 16px;
+      }
+
+      .player-actions {
+        width: 100%;
+      }
+
+      .player-actions .action-button {
+        flex: 1;
+      }
+
+      .channels-toolbar {
+        align-items: stretch;
+      }
+
+      .search-box {
+        width: 100%;
+      }
+
+      .filter-row {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .filter-button {
+        padding: 9px 5px;
+        font-size: 10px;
+      }
+
+      .channel-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .channel-card {
+        padding: 16px;
+      }
+
+      .channel-info h3 {
+        font-size: 15px;
+      }
+
+      .footer-inner {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-    <!-- HEADER -->
-    <header class="header">
-        <a href="#" class="brand">
-            <span class="brand-icon">N</span>
+  <!-- HEADER -->
 
-            <span class="brand-text">
-                NAOL
-                <small>ETHIOPIA TV LIVE</small>
-            </span>
-        </a>
+  <header class="site-header">
+    <div class="container header-inner">
 
-        <button
-            class="menu-button"
-            id="menuButton"
-            aria-label="Open navigation"
-        >
-            ☰
-        </button>
+      <a class="brand" href="#" aria-label="Naol Ethiopia TV Live home">
+        <div class="brand-logo" aria-hidden="true">N</div>
 
-        <nav class="navigation" id="navigation">
-            <a href="#home">Home</a>
-            <a href="#channels">Live TV</a>
-            <a href="#premium">Premium</a>
-            <a href="#payment">Payment</a>
-        </nav>
+        <div>
+          <div class="brand-name">NAOL ETHIOPIA TV</div>
+          <div class="brand-subtitle">Live Television</div>
+        </div>
+      </a>
 
-        <button class="premium-header-button" id="headerPremiumButton">
-            💎 Get Premium
-        </button>
-    </header>
+      <div class="header-live">
+        <span class="live-dot"></span>
+        LIVE TV
+      </div>
 
+    </div>
+  </header>
+
+  <main>
 
     <!-- HERO -->
-    <main>
 
-        <section class="hero" id="home">
+    <section class="hero">
+      <div class="container">
 
-            <div class="hero-content">
+        <div class="hero-content">
 
-                <span class="live-badge">
-                    <span class="live-dot"></span>
-                    ETHIOPIAN LIVE TV
-                </span>
+          <div class="eyebrow">
+            <span class="live-dot"></span>
+            YOUR ENTERTAINMENT HUB
+          </div>
 
-                <h1>
-                    Your Television.
-                    <span>Your World.</span>
-                </h1>
+          <h1>
+            Watch Your Favorite
+            <span>Live Channels.</span>
+          </h1>
+
+          <p class="hero-description">
+            Welcome to Naol Ethiopia TV Live. Discover news,
+            sports, entertainment, movies and more from one
+            convenient place. Choose a channel below and watch
+            it in the built-in video player whenever embedding
+            is supported by the broadcaster.
+          </p>
+
+          <div class="hero-stats">
+
+            <div class="stat-pill">
+              📺 <strong id="channelCount">14</strong>
+              Channels
+            </div>
+
+            <div class="stat-pill">
+              ▶️ Built-in Player
+            </div>
+
+            <div class="stat-pill">
+              📱 Mobile Friendly
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- LIVE PLAYER -->
+
+    <section
+      class="player-section"
+      id="livePlayerSection"
+    >
+      <div class="container">
+
+        <div class="section-heading">
+
+          <div>
+            <h2>Now Playing</h2>
+            <p>Select any channel to load its video here.</p>
+          </div>
+
+          <div class="player-status">
+            <span class="live-dot"></span>
+            LIVE PLAYER
+          </div>
+
+        </div>
+
+        <div class="player-shell">
+
+          <div class="player-screen">
+
+            <iframe
+              id="embedPlayer"
+              title="Naol Ethiopia TV Live Player"
+              src="about:blank"
+              allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+              allowfullscreen
+              referrerpolicy="strict-origin-when-cross-origin"
+            ></iframe>
+
+            <div
+              class="player-placeholder"
+              id="playerPlaceholder"
+            >
+              <div class="placeholder-content">
+
+                <div class="placeholder-icon">▶</div>
+
+                <h3>Choose Your Channel</h3>
 
                 <p>
-                    Discover Ethiopian television channels in one place.
-                    Search, select and enjoy available live broadcasts
-                    on your phone or computer.
+                  Select WATCH LIVE on a channel below to load
+                  the stream in this player.
                 </p>
 
-                <div class="hero-actions">
-                    <a href="#channels" class="primary-button">
-                        ▶ Explore Channels
-                    </a>
+              </div>
+            </div>
 
-                    <a href="#premium" class="secondary-button">
-                        💎 View Plans
-                    </a>
-                </div>
+          </div>
 
-                <div class="hero-features">
-                    <span>📱 Mobile Friendly</span>
-                    <span>📺 Live Channels</span>
-                    <span>🌐 Online Streaming</span>
-                </div>
+          <div class="player-details">
+
+            <div>
+              <div class="now-playing-label">
+                CURRENT CHANNEL
+              </div>
+
+              <div class="player-title" id="playerTitle">
+                No channel selected
+              </div>
+
+              <div class="player-subtitle" id="playerSubtitle">
+                Select a channel to start watching.
+              </div>
+            </div>
+
+            <div class="player-actions">
+
+              <button
+                class="action-button primary"
+                id="fullscreenButton"
+                type="button"
+              >
+                ⛶ Fullscreen
+              </button>
+
+              <button
+                class="action-button"
+                id="stopButton"
+                type="button"
+              >
+                ■ Stop
+              </button>
 
             </div>
 
-            <div class="hero-visual">
-                <div class="orb orb-one"></div>
-                <div class="orb orb-two"></div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- CHANNEL LIST -->
+
+    <section class="channels-section" id="channelsSection">
+      <div class="container">
+
+        <div class="section-heading">
+
+          <div>
+            <h2>Explore Channels</h2>
+            <p>Choose a channel and watch it in the player above.</p>
+          </div>
+
+        </div>
+
+        <div class="channels-toolbar">
+
+          <div class="search-box">
+            <span class="search-icon" aria-hidden="true">⌕</span>
+
+            <input
+              id="channelSearch"
+              type="search"
+              placeholder="Search channels..."
+              aria-label="Search channels"
+              autocomplete="off"
+            >
+          </div>
+
+          <div class="filter-row" aria-label="Filter channels">
+
+            <button
+              class="filter-button active"
+              type="button"
+              data-category="all"
+            >
+              All Channels
+            </button>
+
+            <button
+              class="filter-button"
+              type="button"
+              data-category="News"
+            >
+              News
+            </button>
 
-                <div class="tv-illustration">
-                    <div class="tv-screen">
-                        <div class="screen-logo">NAOL</div>
-                        <div class="screen-caption">
-                            ETHIOPIA TV LIVE
-                        </div>
-                        <div class="screen-play">▶</div>
-                    </div>
+            <button
+              class="filter-button"
+              type="button"
+              data-category="Entertainment"
+            >
+              Entertainment
+            </button>
 
-                    <div class="tv-stand"></div>
-                    <div class="tv-base"></div>
-                </div>
-            </div>
+            <button
+              class="filter-button"
+              type="button"
+              data-category="Movies"
+            >
+              Movies
+            </button>
 
-        </section>
+            <button
+              class="filter-button"
+              type="button"
+              data-category="Comedy"
+            >
+              Comedy
+            </button>
 
+            <button
+              class="filter-button"
+              type="button"
+              data-category="Sports"
+            >
+              Sports
+            </button>
 
-        <!-- CHANNELS -->
-        <section class="section" id="channels">
+          </div>
+
+        </div>
 
-            <div class="section-heading">
-                <div>
-                    <span class="eyebrow">WATCH TELEVISION</span>
-                    <h2>Explore Channels</h2>
-                    <p>Search and select an available channel.</p>
-                </div>
+        <div
+          class="channel-grid"
+          id="channelList"
+          aria-live="polite"
+        >
+          <!-- Channel cards are generated by script.js -->
+        </div>
 
-                <span class="channel-count" id="channelCount">
-                    0 Channels
-                </span>
-            </div>
+      </div>
+    </section>
+
+    <!-- NOTICE -->
 
+    <section class="container">
+      <div class="notice">
 
-            <div class="channel-toolbar">
+        <div class="notice-icon" aria-hidden="true">ⓘ</div>
 
-                <div class="search-box">
-                    <span>🔎</span>
+        <div>
+          <h3>Streaming Information</h3>
 
-                    <input
-                        type="search"
-                        id="channelSearch"
-                        placeholder="Search TV channels..."
-                        aria-label="Search TV channels"
-                    >
-                </div>
-
-                <select id="channelCategory" aria-label="Filter channels">
-                    <option value="all">All Channels</option>
-                    <option value="news">News</option>
-                    <option value="entertainment">Entertainment</option>
-                    <option value="sports">Sports</option>
-                    <option value="regional">Regional</option>
-                </select>
-
-            </div>
-
-
-            <div class="channel-grid" id="channelGrid">
-
-                <!-- Channel cards are created by script.js -->
-
-            </div>
-
-
-            <div class="empty-state" id="emptyState" hidden>
-                <div class="empty-icon">📺</div>
-
-                <h3>No channels found</h3>
-
-                <p>
-                    Try another channel name or select a different category.
-                </p>
-            </div>
-
-        </section>
-
-
-        <!-- VIDEO PLAYER -->
-        <section class="section player-section" id="watch">
-
-            <div class="section-heading">
-                <div>
-                    <span class="eyebrow">NOW WATCHING</span>
-                    <h2 id="playerTitle">Choose a Channel</h2>
-                    <p id="playerDescription">
-                        Select a channel above to start watching.
-                    </p>
-                </div>
-
-                <span class="player-live-status" id="playerStatus">
-                    READY
-                </span>
-            </div>
-
-
-            <div class="video-container" id="videoContainer">
-
-                <div class="player-placeholder" id="playerPlaceholder">
-                    <div class="placeholder-icon">📡</div>
-
-                    <h3>Your live TV player</h3>
-
-                    <p>
-                        Select a channel to load its available broadcast.
-                    </p>
-                </div>
-
-                <video
-                    id="videoPlayer"
-                    controls
-                    playsinline
-                    preload="none"
-                    hidden
-                ></video>
-
-                <iframe
-                    id="embedPlayer"
-                    title="Live television player"
-                    allow="autoplay; encrypted-media; picture-in-picture"
-                    allowfullscreen
-                    referrerpolicy="strict-origin-when-cross-origin"
-                    hidden
-                ></iframe>
-
-            </div>
-
-
-            <div class="player-controls">
-
-                <button id="fullscreenButton" class="control-button">
-                    ⛶ Full Screen
-                </button>
-
-                <button id="rotateButton" class="control-button">
-                    📱 Rotate Screen
-                </button>
-
-                <button id="castButton" class="control-button">
-                    📡 Cast
-                </button>
-
-            </div>
-
-            <p class="player-notice" id="playerNotice" aria-live="polite">
-                Select an available channel to begin.
-            </p>
-
-        </section>
-
-
-        <!-- PREMIUM SUBSCRIPTION -->
-        <section class="section premium-section" id="premium">
-
-            <div class="premium-intro">
-
-                <span class="eyebrow">UNLOCK YOUR EXPERIENCE</span>
-
-                <h2>Choose Your <span>Premium Plan</span></h2>
-
-                <p>
-                    Subscribe by month or year. Your subscription period
-                    is measured in calendar months or a year, not days.
-                </p>
-
-            </div>
-
-
-            <div class="pricing-grid">
-
-                <!-- ONE MONTH -->
-                <article class="pricing-card">
-
-                    <div class="plan-icon">🥉</div>
-
-                    <h3>Monthly</h3>
-
-                    <p class="plan-description">
-                        One calendar month
-                    </p>
-
-                    <div class="plan-price">
-                        <strong>500</strong>
-                        <span>ETB / month</span>
-                    </div>
-
-                    <ul>
-                        <li>✓ 1-month subscription</li>
-                        <li>✓ Access after approval</li>
-                        <li>✓ Mobile-friendly viewing</li>
-                    </ul>
-
-                    <button
-                        class="plan-button"
-                        data-plan="monthly"
-                    >
-                        Select Monthly
-                    </button>
-
-                </article>
-
-
-                <!-- TWO MONTHS -->
-                <article class="pricing-card">
-
-                    <div class="plan-icon">🥈</div>
-
-                    <h3>Two Months</h3>
-
-                    <p class="plan-description">
-                        Two calendar months
-                    </p>
-
-                    <div class="plan-price">
-                        <strong>1,000</strong>
-                        <span>ETB / 2 months</span>
-                    </div>
-
-                    <ul>
-                        <li>✓ 2-month subscription</li>
-                        <li>✓ Access after approval</li>
-                        <li>✓ Mobile-friendly viewing</li>
-                    </ul>
-
-                    <button
-                        class="plan-button"
-                        data-plan="twoMonths"
-                    >
-                        Select 2 Months
-                    </button>
-
-                </article>
-
-
-                <!-- THREE MONTHS -->
-                <article class="pricing-card featured-plan">
-
-                    <div class="popular-badge">POPULAR</div>
-
-                    <div class="plan-icon">🥇</div>
-
-                    <h3>Three Months</h3>
-
-                    <p class="plan-description">
-                        Three calendar months
-                    </p>
-
-                    <div class="plan-price">
-                        <strong>1,500</strong>
-                        <span>ETB / 3 months</span>
-                    </div>
-
-                    <ul>
-                        <li>✓ 3-month subscription</li>
-                        <li>✓ Access after approval</li>
-                        <li>✓ Mobile-friendly viewing</li>
-                    </ul>
-
-                    <button
-                        class="plan-button"
-                        data-plan="threeMonths"
-                    >
-                        Select 3 Months
-                    </button>
-
-                </article>
-
-
-                <!-- ONE YEAR -->
-                <article class="pricing-card annual-plan">
-
-                    <div class="plan-icon">💎</div>
-
-                    <h3>Annual Premium</h3>
-
-                    <p class="plan-description">
-                        One full calendar year
-                    </p>
-
-                    <div class="plan-price">
-                        <strong>6,999</strong>
-                        <span>ETB / year</span>
-                    </div>
-
-                    <ul>
-                        <li>✓ 12-month subscription</li>
-                        <li>✓ Access after approval</li>
-                        <li>✓ Mobile-friendly viewing</li>
-                    </ul>
-
-                    <button
-                        class="plan-button"
-                        data-plan="annual"
-                    >
-                        Select Annual
-                    </button>
-
-                </article>
-
-            </div>
-
-        </section>
-
-
-        <!-- PAYMENT -->
-        <section class="section payment-section" id="payment">
-
-            <div class="section-heading">
-                <div>
-                    <span class="eyebrow">PREMIUM ACTIVATION</span>
-                    <h2>Payment Instructions</h2>
-
-                    <p>
-                        Follow these steps to request premium activation.
-                    </p>
-                </div>
-            </div>
-
-
-            <div class="payment-layout">
-
-                <div class="payment-card">
-
-                    <div class="payment-card-header">
-                        <span class="payment-icon">💳</span>
-
-                        <div>
-                            <h3>Telebirr</h3>
-                            <p>Manual payment verification</p>
-                        </div>
-                    </div>
-
-
-                    <div class="payment-number-box">
-
-                        <span>Payment Number</span>
-
-                        <strong id="paymentNumber">
-                            0908052813
-                        </strong>
-
-                        <button
-                            id="copyPaymentNumber"
-                            class="copy-button"
-                        >
-                            Copy Number
-                        </button>
-
-                    </div>
-
-
-                    <div class="selected-plan-box">
-
-                        <span>Selected Subscription</span>
-
-                        <strong id="selectedPlanName">
-                            No plan selected
-                        </strong>
-
-                        <strong id="selectedPlanPrice">
-                            Select a plan above
-                        </strong>
-
-                    </div>
-
-
-                    <ol class="payment-steps">
-                        <li>Select your preferred subscription.</li>
-                        <li>Send the exact payment through Telebirr.</li>
-                        <li>Save your payment confirmation screenshot.</li>
-                        <li>Email your payment evidence for verification.</li>
-                    </ol>
-
-
-                    <button
-                        id="emailPaymentButton"
-                        class="primary-button payment-submit"
-                        disabled
-                    >
-                        ✉ Send Payment Evidence
-                    </button>
-
-
-                    <p class="payment-warning">
-                        Payment is not automatically verified.
-                        Premium access must be approved by the administrator.
-                    </p>
-
-                </div>
-
-
-                <div class="verification-card">
-
-                    <div class="verification-icon">🔐</div>
-
-                    <h3>Secure Activation</h3>
-
-                    <p>
-                        Your subscription begins after payment verification
-                        and administrator approval.
-                    </p>
-
-                    <div class="verification-detail">
-                        <span>📧</span>
-
-                        <div>
-                            <strong>Verification Email</strong>
-
-                            <p id="verificationEmail">
-                                natidesta67@gmail.com
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="verification-detail">
-                        <span>🗓️</span>
-
-                        <div>
-                            <strong>Subscription Duration</strong>
-
-                            <p>
-                                Based on the plan you purchase.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="verification-detail">
-                        <span>👤</span>
-
-                        <div>
-                            <strong>Manual Approval</strong>
-
-                            <p>
-                                Wait until your payment is confirmed.
-                            </p>
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- FOOTER -->
-        <footer class="footer">
-
-            <a href="#home" class="footer-brand">
-                NAOL ETHIOPIA TV LIVE
-            </a>
-
-            <p>
-                Watch authorized broadcasts from participating channels.
-            </p>
-
-            <p class="copyright">
-                © <span id="currentYear"></span> Naol Ethiopia TV Live
-            </p>
-
-        </footer>
-
-    </main>
-
-
-    <!-- JAVASCRIPT -->
-    <script src="script.js"></script>
+          <p>
+            Videos are provided through their YouTube embed
+            players. Some streams may be unavailable because
+            they have ended, are private, are restricted by
+            region, or do not permit embedding. This website
+            does not bypass broadcaster restrictions.
+            Only share or embed streams you are authorized to use.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+
+      <div>
+        <div class="footer-brand">NAOL ETHIOPIA TV LIVE</div>
+
+        <p class="footer-text">
+          Your entertainment, news and live television hub.
+        </p>
+      </div>
+
+      <div class="footer-tag">
+        Watch · Discover · Enjoy
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- CHANNEL SCRIPT -->
+
+  <script src="script.js" defer></script>
+
+  <!-- PLAYER CONTROLS -->
+
+  <script>
+    "use strict";
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const player = document.getElementById("embedPlayer");
+      const placeholder = document.getElementById("playerPlaceholder");
+      const title = document.getElementById("playerTitle");
+      const subtitle = document.getElementById("playerSubtitle");
+
+      const fullscreenButton =
+        document.getElementById("fullscreenButton");
+
+      const stopButton =
+        document.getElementById("stopButton");
+
+      const channelCount =
+        document.getElementById("channelCount");
+
+      if (channelCount) {
+        channelCount.textContent = "14";
+      }
+
+      /*
+       * Hide the placeholder when a video is loaded.
+       * A cross-origin iframe cannot reliably tell this page
+       * whether the video is actually playing.
+       */
+      document.addEventListener("click", event => {
+        const button = event.target.closest("[data-play-channel]");
+
+        if (!button) return;
+
+        const card = button.closest(".channel-card");
+        const channelName =
+          card?.querySelector(".channel-info h3")?.textContent ||
+          "Selected Channel";
+
+        if (placeholder) {
+          placeholder.style.display = "none";
+        }
+
+        if (title) {
+          title.textContent = channelName;
+        }
+
+        if (subtitle) {
+          subtitle.textContent =
+            "Loading embedded stream. Availability depends on YouTube.";
+        }
+      });
+
+      /*
+       * Fullscreen player.
+       */
+      if (fullscreenButton && player) {
+        fullscreenButton.addEventListener("click", async () => {
+          const screen = document.querySelector(".player-screen");
+
+          try {
+            if (document.fullscreenElement) {
+              await document.exitFullscreen();
+            } else if (screen?.requestFullscreen) {
+              await screen.requestFullscreen();
+            } else {
+              alert(
+                "Fullscreen browser kee irratti hin deeggaramne."
+              );
+            }
+          } catch (error) {
+            console.error("Fullscreen error:", error);
+          }
+        });
+      }
+
+      /*
+       * Stop the current stream and restore the placeholder.
+       */
+      if (stopButton && player) {
+        stopButton.addEventListener("click", () => {
+          player.src = "about:blank";
+
+          if (placeholder) {
+            placeholder.style.display = "flex";
+          }
+
+          if (title) {
+            title.textContent = "No channel selected";
+          }
+
+          if (subtitle) {
+            subtitle.textContent =
+              "Select a channel to start watching.";
+          }
+        });
+      }
+    });
+  </script>
 
 </body>
 </html>
