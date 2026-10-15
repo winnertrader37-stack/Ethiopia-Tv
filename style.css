@@ -1600,3 +1600,101 @@ select:focus-visible {
         transition-duration: 0.01ms !important;
     }
 }
+/* =========================================
+   NAOL TV PLAYER & CHANNEL BUTTONS
+   ========================================= */
+
+.channel-card {
+  overflow: hidden;
+  border-radius: 18px;
+}
+
+.channel-card-logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 90px;
+  font-size: 42px;
+}
+
+.channel-card-content {
+  padding: 16px;
+}
+
+.channel-card-content h3 {
+  margin: 0 0 8px;
+}
+
+.channel-card-content p {
+  line-height: 1.6;
+}
+
+.channel-category-label {
+  display: inline-block;
+  margin: 6px 0 12px;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+}
+
+.watch-button,
+.watch-official-button {
+  display: inline-block;
+  width: 100%;
+  padding: 13px 16px;
+  border: 0;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #087f5b, #16a085);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.watch-button:hover,
+.watch-official-button:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+.naol-player-message {
+  max-width: 440px;
+  margin: auto;
+  padding: 28px 18px;
+  text-align: center;
+}
+
+.naol-player-logo {
+  margin-bottom: 12px;
+  font-size: 48px;
+}
+
+.naol-player-message h3 {
+  margin-bottom: 12px;
+}
+
+.naol-player-message p {
+  margin-bottom: 20px;
+  line-height: 1.7;
+}
+
+#embedPlayer {
+  display: none;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 0;
+}
+
+#videoPlayer {
+  width: 100%;
+  max-width: 100%;
+}
+
+#playerPlaceholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 280px;
+  padding: 20px;
+  text-align: center;
+}
