@@ -1,1188 +1,752 @@
 "use strict";
 
-/* =====================================================
+/* =========================================================
    NAOL ETHIOPIA TV LIVE
-   Corrected Channel Search, Live Links and Player
-   ===================================================== */
+   Channel Directory + Search + Category + Live Player
+   Version: 3.0
+   ========================================================= */
 
-document.addEventListener("DOMContentLoaded", function () {
-
-    const $ = id => document.getElementById(id);
-
-    /* ================================================
-       1. CHANNEL CONFIGURATION
-       ================================================ */
-
-    /*
-       officialUrl:
-       Opens the broadcaster's official live page.
-
-       streamUrl:
-       Optional direct stream URL. Add only a verified,
-       authorized stream URL that works in a browser.
-
-       YouTube channel pages cannot always be embedded
-       directly. Opening the official page is the fallback.
-    */
-
-    const channels = [
-        {
-            id: "etv-oromoo",
-            name: "ETV Afaan Oromoo",
-            shortName: "ETV",
-            category: "news",
-            description: "ETV Afaan Oromoo official channel",
-            officialUrl:
-                "https://www.youtube.com/@etvafaanoromoo/live",
-            streamUrl: "",
-            type: "link"
-        },
-
-        {
-            id: "ebc",
-            name: "EBC",
-            shortName: "EBC",
-            category: "news",
-            description: "Ethiopian Broadcasting Corporation",
-            officialUrl:
-                "https://www.ebc.et/",
-            streamUrl: "",
-            type: "link"
-        },
-
-        {
-            id: "fana",
-            name: "Fana TV",
-            shortName: "FANA",
-            category: "news",
-            description: "Fana TV official live page",
-            officialUrl:
-                "https://www.fanamc.com/english/live/",
-            streamUrl: "",
-            type: "link"
-        },
-
-        {
-            id: "obn",
-            name: "OBN Afaan Oromoo",
-            shortName: "OBN",
-            category: "regional",
-            description: "Oromia Broadcasting Network",
-            officialUrl:
-                "https://www.youtube.com/@OBNoromiyaa/live",
-            streamUrl: "",
-            type: "link"
-        },
-
-        {
-            id: "amhara",
-            name: "Amhara Media",
-            shortName: "AM",
-            category: "regional",
-            description: "Amhara regional broadcasting",
-            officialUrl:
-                "https://www.ameco.et/",
-            streamUrl: "",
-            type: "link"
-        },
-
-        {
-            id: "addis",
-            name: "Addis Media",
-            shortName: "ADDIS",
-            category: "entertainment",
-            description: "Addis Media Network",
-            officialUrl:
-                "https://www.youtube.com/",
-            streamUrl: "",
-            type: "link"
-        },
-
-        {
-            id: "etv-entertainment",
-            name: "ETV Entertainment",
-            shortName: "ETVE",
-            category: "entertainment",
-            description: "Ethiopian entertainment programs",
-            officialUrl:
-                "https://www.youtube.com/@ebcentertainment3193/live",
-            streamUrl: "",
-            type: "link"
-        },
-
-        {
-            id: "etv-world",
-            name: "EBC World",
-            shortName: "WORLD",
-            category: "news",
-            description: "EBC World official channel",
-            officialUrl:
-                "https://www.youtube.com/@EBCworld/live",
-            streamUrl: "",
-            type: "link"
-        }
-    ];
+/*
+  IMPORTANT:
+  - officialUrl: Official broadcaster website or channel page.
+  - embedUrl: Only a verified, authorized embed URL.
+  - Empty embedUrl means the official page opens instead.
+  - A normal website URL is NOT necessarily a video stream URL.
+*/
 
 
-    /* ================================================
-       2. SUBSCRIPTION CONFIGURATION
-       ================================================ */
+/* =========================================================
+   1. CHANNEL DATABASE
+   ========================================================= */
 
-    const plans = {
-        monthly: {
-            name: "Monthly",
-            months: 1,
-            price: 500
-        },
+const naolChannels = [
 
-        twoMonths: {
-            name: "Two Months",
-            months: 2,
-            price: 1000
-        },
+  // -------------------------------------------------------
+  // ETHIOPIAN TV CHANNELS
+  // -------------------------------------------------------
 
-        threeMonths: {
-            name: "Three Months",
-            months: 3,
-            price: 1500
-        },
+  {
+    id: "etv-oromoo",
+    name: "ETV Afaan Oromoo",
+    category: "Ethiopia",
+    description: "Oduu fi sagantaalee Afaan Oromoo.",
+    logo: "🇪🇹",
+    officialUrl: "https://www.youtube.com/@etvafaanoromoo/live",
+    embedUrl: ""
+  },
 
-        annual: {
-            name: "Annual Premium",
-            months: 12,
-            price: 6999
-        }
+  {
+    id: "ebc-world",
+    name: "EBC World",
+    category: "Ethiopia",
+    description: "Oduu Itoophiyaa fi addunyaa.",
+    logo: "🇪🇹",
+    officialUrl: "https://www.youtube.com/@EBCworld",
+    embedUrl: ""
+  },
+
+  {
+    id: "etv-entertainment",
+    name: "ETV Entertainment",
+    category: "Entertainment",
+    description: "Bashannana fi sagantaalee garaagaraa.",
+    logo: "🎬",
+    officialUrl: "https://www.youtube.com/@ebcentertainment3193",
+    embedUrl: ""
+  },
+
+  {
+    id: "fana-tv",
+    name: "Fana TV",
+    category: "Ethiopia",
+    description: "Oduu fi sagantaalee Itoophiyaa.",
+    logo: "📺",
+    officialUrl: "https://www.fanamc.com/english/live/",
+    embedUrl: ""
+  },
+
+  {
+    id: "obn",
+    name: "OBN Oromiyaa",
+    category: "Ethiopia",
+    description: "Oduu fi sagantaalee Oromiyaa.",
+    logo: "🌳",
+    officialUrl: "https://www.youtube.com/@OBNoromiyaa/live",
+    embedUrl: ""
+  },
+
+  {
+    id: "amhara-media",
+    name: "Amhara Media",
+    category: "Ethiopia",
+    description: "Oduu fi sagantaalee naannoo Amaaraa.",
+    logo: "🇪🇹",
+    officialUrl: "https://www.ameco.et/",
+    embedUrl: ""
+  },
+
+  {
+    id: "amn",
+    name: "Addis Media Network",
+    category: "Ethiopia",
+    description: "Oduu fi sagantaalee Addis Ababa.",
+    logo: "🏙️",
+    officialUrl: "https://www.amn.gov.et/",
+    embedUrl: ""
+  },
+
+  {
+    id: "ebc",
+    name: "EBC Official",
+    category: "Ethiopia",
+    description: "Tamsaasa fi oduu Itoophiyaa.",
+    logo: "📡",
+    officialUrl: "https://www.ebc.et/",
+    embedUrl: ""
+  },
+
+
+  // -------------------------------------------------------
+  // INTERNATIONAL NEWS CHANNELS
+  // -------------------------------------------------------
+
+  {
+    id: "aljazeera",
+    name: "Al Jazeera English",
+    category: "News",
+    description: "Oduu addunyaa fi taateewwan kallattiin.",
+    logo: "🌍",
+    officialUrl: "https://www.aljazeera.com/video/live/",
+    embedUrl: ""
+  },
+
+  {
+    id: "sky-news",
+    name: "Sky News",
+    category: "News",
+    description: "Oduu addunyaa fi taateewwan haaraa.",
+    logo: "📰",
+    officialUrl: "https://news.sky.com/watch-live",
+    embedUrl: ""
+  },
+
+  {
+    id: "euronews",
+    name: "Euronews",
+    category: "News",
+    description: "Oduu, dinagdee fi siyaasaa.",
+    logo: "🌐",
+    officialUrl: "https://www.euronews.com/live",
+    embedUrl: ""
+  },
+
+  {
+    id: "trt-world",
+    name: "TRT World",
+    category: "News",
+    description: "Oduu addunyaa.",
+    logo: "🌍",
+    officialUrl: "https://www.trtworld.com/",
+    embedUrl: ""
+  },
+
+  {
+    id: "france24",
+    name: "France 24 English",
+    category: "News",
+    description: "Oduu addunyaa Afaan Ingiliffaan.",
+    logo: "🇫🇷",
+    officialUrl: "https://www.france24.com/en/live",
+    embedUrl: ""
+  },
+
+  {
+    id: "aljazeera-mubasher",
+    name: "Al Jazeera Mubasher",
+    category: "News",
+    description: "Taateewwan kallattiin fi oduu.",
+    logo: "📡",
+    officialUrl: "https://network.aljazeera.net/en/channels/aljazeera-mubasher",
+    embedUrl: ""
+  },
+
+  {
+    id: "nhk-world",
+    name: "NHK World-Japan",
+    category: "News",
+    description: "Oduu, aadaa fi jireenya Jaappaan.",
+    logo: "🇯🇵",
+    officialUrl: "https://www3.nhk.or.jp/nhkworld/",
+    embedUrl: ""
+  },
+
+  {
+    id: "cgtn",
+    name: "CGTN",
+    category: "News",
+    description: "Oduu Chaayinaa fi addunyaa.",
+    logo: "🌏",
+    officialUrl: "https://www.cgtn.com/",
+    embedUrl: ""
+  },
+
+  {
+    id: "dw-news",
+    name: "DW News",
+    category: "News",
+    description: "Oduu addunyaa.",
+    logo: "📰",
+    officialUrl: "https://www.dw.com/en/live-tv/s-100825",
+    embedUrl: ""
+  },
+
+
+  // -------------------------------------------------------
+  // SPORTS, ENTERTAINMENT AND SCIENCE
+  // -------------------------------------------------------
+
+  {
+    id: "fifa-plus",
+    name: "FIFA+",
+    category: "Sports",
+    description: "Kubbaa miilaa fi taphoota filataman.",
+    logo: "⚽",
+    officialUrl: "https://www.plus.fifa.com/",
+    embedUrl: ""
+  },
+
+  {
+    id: "redbull-tv",
+    name: "Red Bull TV",
+    category: "Sports",
+    description: "Ispoortii, dorgommii fi bashannana.",
+    logo: "🏎️",
+    officialUrl: "https://www.redbull.com/int-en/tv",
+    embedUrl: ""
+  },
+
+  {
+    id: "olympics",
+    name: "Olympics",
+    category: "Sports",
+    description: "Olompikii fi sagantaalee ispoortii.",
+    logo: "🏅",
+    officialUrl: "https://olympics.com/en/watch",
+    embedUrl: ""
+  },
+
+  {
+    id: "nasa",
+    name: "NASA Live",
+    category: "Science",
+    description: "Saayinsii, hawaa fi qorannoo.",
+    logo: "🚀",
+    officialUrl: "https://www.nasa.gov/live/",
+    embedUrl: ""
+  }
+
+];
+
+
+/* =========================================================
+   2. HTML ELEMENTS
+   ========================================================= */
+
+const naolGetElement = (id) => document.getElementById(id);
+
+
+/* =========================================================
+   3. SAFE TEXT HELPER
+   ========================================================= */
+
+function naolEscapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, (character) => {
+    const entities = {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
     };
 
-    const PAYMENT_NUMBER = "0908052813";
-    const PAYMENT_EMAIL = "natidesta67@gmail.com";
+    return entities[character];
+  });
+}
 
 
-    /* ================================================
-       3. APPLICATION STATE
-       ================================================ */
+/* =========================================================
+   4. PLAYER MESSAGE
+   ========================================================= */
 
-    let selectedChannelId = null;
-    let selectedPlanId = null;
+function naolShowPlayerMessage(channel, message) {
+  const placeholder = naolGetElement("playerPlaceholder");
 
+  if (!placeholder) {
+    return;
+  }
 
-    /* ================================================
-       4. SAFE LOCAL STORAGE
-       ================================================ */
+  placeholder.style.display = "flex";
 
-    function loadFavorites() {
-        try {
-            const value = JSON.parse(
-                localStorage.getItem("naol_tv_favorites") || "[]"
-            );
+  placeholder.innerHTML = `
+    <div class="naol-player-message">
 
-            return Array.isArray(value) ? value : [];
+      <div class="naol-player-logo">
+        ${naolEscapeHTML(channel.logo)}
+      </div>
 
-        } catch (error) {
-            return [];
-        }
-    }
+      <h3>${naolEscapeHTML(channel.name)}</h3>
 
+      <p>${naolEscapeHTML(message)}</p>
 
-    function saveFavorites(favorites) {
-        try {
-            localStorage.setItem(
-                "naol_tv_favorites",
-                JSON.stringify(favorites)
-            );
+      <button
+        type="button"
+        id="naolOfficialWatchButton"
+        class="watch-official-button"
+      >
+        ▶ WATCH LIVE / OFFICIAL PAGE
+      </button>
 
-        } catch (error) {
-            console.warn("Favorites could not be saved.");
-        }
-    }
+    </div>
+  `;
 
+  const button = naolGetElement("naolOfficialWatchButton");
 
-    /* ================================================
-       5. PLAYER ELEMENTS
-       ================================================ */
-
-    const videoPlayer = $("videoPlayer");
-    const embedPlayer = $("embedPlayer");
-    const playerPlaceholder = $("playerPlaceholder");
-
-    const playerTitle = $("playerTitle");
-    const playerDescription = $("playerDescription");
-    const playerStatus = $("playerStatus");
-    const playerNotice = $("playerNotice");
-
-    const videoContainer = $("videoContainer");
-
-
-    /* ================================================
-       6. NOTICE AND STATUS
-       ================================================ */
-
-    function showNotice(message, type = "") {
-
-        if (!playerNotice) return;
-
-        playerNotice.textContent = message;
-        playerNotice.className = "player-notice";
-
-        if (type) {
-            playerNotice.classList.add(type);
-        }
-    }
-
-
-    function setStatus(message) {
-
-        if (playerStatus) {
-            playerStatus.textContent = message;
-        }
-    }
-
-
-    /* ================================================
-       7. STOP CURRENT STREAM
-       ================================================ */
-
-    function stopPlayer() {
-
-        if (videoPlayer) {
-
-            try {
-                videoPlayer.pause();
-            } catch (error) {
-                // Ignore pause errors.
-            }
-
-            videoPlayer.removeAttribute("src");
-            videoPlayer.load();
-            videoPlayer.hidden = true;
-        }
-
-
-        if (embedPlayer) {
-            embedPlayer.src = "about:blank";
-            embedPlayer.hidden = true;
-        }
-
-
-        if (playerPlaceholder) {
-            playerPlaceholder.hidden = false;
-        }
-    }
-
-
-    /* ================================================
-       8. OPEN OFFICIAL TV PAGE
-       ================================================ */
-
-    function openOfficialChannel(channel) {
-
-        if (!channel || !channel.officialUrl) {
-
-            showNotice(
-                "Linkii TV kanaa hin argamne.",
-                "error"
-            );
-
-            return;
-        }
-
-
-        let url;
-
-        try {
-            url = new URL(channel.officialUrl);
-
-        } catch (error) {
-
-            showNotice(
-                "Linkiin TV sirrii miti.",
-                "error"
-            );
-
-            return;
-        }
-
-
-        if (url.protocol !== "https:") {
-
-            showNotice(
-                "Linkiin nageenya qabu miti.",
-                "error"
-            );
-
-            return;
-        }
-
-
-        /*
-         * Open the official broadcaster in a new tab.
-         * This works even when the provider blocks iframe
-         * embedding on third-party websites.
-         */
-
-        const opened = window.open(
-            url.href,
-            "_blank",
-            "noopener,noreferrer"
-        );
-
-
-        if (!opened) {
-
-            /*
-             * Some mobile browsers block new windows.
-             * Fall back to navigating the current tab.
-             */
-
-            window.location.href = url.href;
-
-            return;
-        }
-
-
-        setStatus("OFFICIAL PAGE");
-
-        showNotice(
-            channel.name +
-            " fuula ofiisaa irratti baname. " +
-            "Yoo tamsaasa live jiraate achitti daawwadhu.",
-            "success"
-        );
-    }
-
-
-    /* ================================================
-       9. VALIDATE EMBED URL
-       ================================================ */
-
-    function getValidEmbedUrl(value) {
-
-        try {
-
-            const url = new URL(value);
-
-            if (url.protocol !== "https:") {
-                return null;
-            }
-
-
-            const permittedHosts = [
-                "www.youtube.com",
-                "youtube.com",
-                "www.youtube-nocookie.com"
-            ];
-
-
-            if (!permittedHosts.includes(url.hostname)) {
-                return null;
-            }
-
-
-            if (!url.pathname.startsWith("/embed/")) {
-                return null;
-            }
-
-
-            return url.href;
-
-        } catch (error) {
-
-            return null;
-        }
-    }
-
-
-    /* ================================================
-       10. PLAY DIRECT VIDEO
-       ================================================ */
-
-    function playDirectVideo(channel) {
-
-        if (!videoPlayer) {
-
-            openOfficialChannel(channel);
-
-            return;
-        }
-
-
-        stopPlayer();
-
-        videoPlayer.hidden = false;
-
-        videoPlayer.src = channel.streamUrl;
-
-        if (playerPlaceholder) {
-            playerPlaceholder.hidden = true;
-        }
-
-
-        setStatus("LOADING");
-
-        showNotice(
-            "Tamsaasa TV fe'aa jira..."
-        );
-
-
-        videoPlayer.load();
-
-
-        const promise = videoPlayer.play();
-
-
-        if (promise && promise.catch) {
-
-            promise.catch(function () {
-
-                setStatus("PLAYBACK ERROR");
-
-                showNotice(
-                    "Tamsaasa kana taphachiisuu hin dandeenye. " +
-                    "Linkiin sirrii ta'uu fi internet kee mirkaneessi. " +
-                    "Fuula TV ofiisaa banuuf button Watch on Official TV tuqi.",
-                    "error"
-                );
-            });
-        }
-    }
-
-
-    /* ================================================
-       11. PLAY EMBED
-       ================================================ */
-
-    function playEmbeddedVideo(channel) {
-
-        const validUrl = getValidEmbedUrl(
-            channel.streamUrl
-        );
-
-
-        if (!validUrl || !embedPlayer) {
-
-            openOfficialChannel(channel);
-
-            return;
-        }
-
-
-        stopPlayer();
-
-        embedPlayer.hidden = false;
-        embedPlayer.src = validUrl;
-
-
-        if (playerPlaceholder) {
-            playerPlaceholder.hidden = true;
-        }
-
-
-        setStatus("LOADING");
-
-        showNotice(
-            "Tamsaasa TV fe'aa jira..."
-        );
-    }
-
-
-    /* ================================================
-       12. SELECT CHANNEL
-       ================================================ */
-
-    function selectChannel(channelId) {
-
-        const channel = channels.find(
-            item => item.id === channelId
-        );
-
-
-        if (!channel) {
-
-            showNotice(
-                "Chaanaalii kana hin arganne.",
-                "error"
-            );
-
-            return;
-        }
-
-
-        selectedChannelId = channel.id;
-
-
-        if (playerTitle) {
-            playerTitle.textContent = channel.name;
-        }
-
-        if (playerDescription) {
-            playerDescription.textContent =
-                channel.description;
-        }
-
-
-        renderChannels();
-
-
-        /*
-         * When an authorized stream URL is configured,
-         * use the player. Otherwise, open the official page.
-         */
-
-        if (channel.streamUrl) {
-
-            if (channel.type === "video") {
-                playDirectVideo(channel);
-
-            } else if (channel.type === "embed") {
-                playEmbeddedVideo(channel);
-
-            } else {
-                openOfficialChannel(channel);
-            }
-
-        } else {
-
-            openOfficialChannel(channel);
-        }
-    }
-
-
-    /* ================================================
-       13. FAVORITES
-       ================================================ */
-
-    function toggleFavorite(channelId) {
-
-        let favorites = loadFavorites();
-
-
-        if (favorites.includes(channelId)) {
-
-            favorites = favorites.filter(
-                id => id !== channelId
-            );
-
-        } else {
-
-            favorites.push(channelId);
-        }
-
-
-        saveFavorites(favorites);
-
-        renderChannels();
-    }
-
-
-    /* ================================================
-       14. CREATE CHANNEL CARD
-       ================================================ */
-
-    function createChannelCard(channel) {
-
-        const card = document.createElement("article");
-
-        card.className = "channel-card";
-
-        if (channel.id === selectedChannelId) {
-            card.classList.add("active");
-        }
-
-
-        const top = document.createElement("div");
-        top.className = "channel-card-top";
-
-
-        const logo = document.createElement("div");
-        logo.className = "channel-logo";
-        logo.textContent = channel.shortName;
-
-
-        const status = document.createElement("span");
-        status.className = "channel-live-label";
-
-        /*
-         * Do not falsely label an unverified channel as LIVE.
-         */
-
-        status.textContent = "TV";
-
-
-        top.append(logo, status);
-
-
-        const title = document.createElement("h3");
-        title.textContent = channel.name;
-
-
-        const description = document.createElement("p");
-        description.textContent = channel.description;
-
-
-        const bottom = document.createElement("div");
-        bottom.className = "channel-card-bottom";
-
-
-        const watchButton = document.createElement("button");
-
-        watchButton.type = "button";
-        watchButton.className = "watch-channel-button";
-
-        watchButton.textContent = "▶ Watch TV";
-
-
-        watchButton.addEventListener("click", function () {
-            selectChannel(channel.id);
-        });
-
-
-        const favoriteButton = document.createElement("button");
-
-        favoriteButton.type = "button";
-        favoriteButton.className = "favorite-button";
-
-        favoriteButton.textContent =
-            loadFavorites().includes(channel.id)
-                ? "♥"
-                : "♡";
-
-
-        if (loadFavorites().includes(channel.id)) {
-            favoriteButton.classList.add("is-favorite");
-        }
-
-
-        favoriteButton.setAttribute(
-            "aria-label",
-            "Favorite " + channel.name
-        );
-
-
-        favoriteButton.addEventListener("click", function () {
-            toggleFavorite(channel.id);
-        });
-
-
-        bottom.append(
-            watchButton,
-            favoriteButton
-        );
-
-
-        card.append(
-            top,
-            title,
-            description,
-            bottom
-        );
-
-
-        return card;
-    }
-
-
-    /* ================================================
-       15. SEARCH AND FILTER
-       ================================================ */
-
-    function renderChannels() {
-
-        const grid = $("channelGrid");
-        const search = $("channelSearch");
-        const category = $("channelCategory");
-        const count = $("channelCount");
-        const empty = $("emptyState");
-
-
-        if (!grid) {
-            console.error(
-                "channelGrid not found. Check index.html."
-            );
-
-            return;
-        }
-
-
-        const query = search
-            ? search.value.trim().toLowerCase()
-            : "";
-
-
-        const selectedCategory = category
-            ? category.value
-            : "all";
-
-
-        const filtered = channels.filter(channel => {
-
-            const matchesText =
-                channel.name.toLowerCase().includes(query) ||
-                channel.shortName.toLowerCase().includes(query) ||
-                channel.description.toLowerCase().includes(query);
-
-
-            const matchesCategory =
-                selectedCategory === "all" ||
-                channel.category === selectedCategory;
-
-
-            return matchesText && matchesCategory;
-        });
-
-
-        grid.replaceChildren();
-
-
-        filtered.forEach(channel => {
-
-            grid.appendChild(
-                createChannelCard(channel)
-            );
-        });
-
-
-        if (count) {
-
-            count.textContent =
-                filtered.length +
-                (filtered.length === 1
-                    ? " Channel"
-                    : " Channels");
-        }
-
-
-        if (empty) {
-            empty.hidden = filtered.length > 0;
-        }
-    }
-
-
-    const searchInput = $("channelSearch");
-
-    if (searchInput) {
-        searchInput.addEventListener(
-            "input",
-            renderChannels
-        );
-    }
-
-
-    const categorySelect = $("channelCategory");
-
-    if (categorySelect) {
-        categorySelect.addEventListener(
-            "change",
-            renderChannels
-        );
-    }
-
-
-    /* ================================================
-       16. FULL SCREEN
-       ================================================ */
-
-    const fullscreenButton = $("fullscreenButton");
-
-
-    if (fullscreenButton) {
-
-        fullscreenButton.addEventListener(
-            "click",
-            async function () {
-
-                try {
-
-                    if (document.fullscreenElement) {
-
-                        await document.exitFullscreen();
-
-                        return;
-                    }
-
-
-                    if (
-                        videoContainer &&
-                        videoContainer.requestFullscreen
-                    ) {
-
-                        await videoContainer.requestFullscreen();
-
-                    } else {
-
-                        showNotice(
-                            "Browser kee fullscreen hin deeggaru.",
-                            "error"
-                        );
-                    }
-
-                } catch (error) {
-
-                    showNotice(
-                        "Full screen banuu hin dandeenye. " +
-                        "Browser kee keessatti fullscreen yaali.",
-                        "error"
-                    );
-                }
-            }
-        );
-    }
-
-
-    /* ================================================
-       17. ROTATE SCREEN
-       ================================================ */
-
-    const rotateButton = $("rotateButton");
-
-
-    if (rotateButton) {
-
-        rotateButton.addEventListener(
-            "click",
-            async function () {
-
-                try {
-
-                    if (
-                        screen.orientation &&
-                        screen.orientation.lock
-                    ) {
-
-                        await screen.orientation.lock(
-                            "landscape"
-                        );
-
-                        showNotice(
-                            "Landscape mode hojii irra oole.",
-                            "success"
-                        );
-
-                    } else {
-
-                        showNotice(
-                            "Auto-rotate bilbila kee irraa bani; " +
-                            "bilbila gara cinaatti garagalchi.",
-                            "error"
-                        );
-                    }
-
-                } catch (error) {
-
-                    showNotice(
-                        "Browser kee rotation lock hin deeggaru. " +
-                        "Auto-rotate bilbila kee irraa bani.",
-                        "error"
-                    );
-                }
-            }
-        );
-    }
-
-
-    /* ================================================
-       18. CAST BUTTON
-       ================================================ */
-
-    const castButton = $("castButton");
-
-
-    if (castButton) {
-
-        castButton.addEventListener(
-            "click",
-            function () {
-
-                showNotice(
-                    "Cast guutuu hojjechiisuuf Chromecast SDK " +
-                    "fi receiver configuration barbaachisa. " +
-                    "Amma browser casting meeshaa kee yaali.",
-                    "error"
-                );
-            }
-        );
-    }
-
-
-    /* ================================================
-       19. MOBILE MENU
-       ================================================ */
-
-    const menuButton = $("menuButton");
-    const navigation = $("navigation");
-
-
-    if (menuButton && navigation) {
-
-        menuButton.addEventListener(
-            "click",
-            function () {
-
-                const isOpen =
-                    navigation.classList.toggle("open");
-
-
-                menuButton.setAttribute(
-                    "aria-expanded",
-                    String(isOpen)
-                );
-            }
-        );
-
-
-        navigation.querySelectorAll("a").forEach(link => {
-
-            link.addEventListener(
-                "click",
-                function () {
-
-                    navigation.classList.remove("open");
-
-                    menuButton.setAttribute(
-                        "aria-expanded",
-                        "false"
-                    );
-                }
-            );
-        });
-    }
-
-
-    /* ================================================
-       20. SUBSCRIPTION PLANS
-       ================================================ */
-
-    function formatPrice(price) {
-
-        return new Intl.NumberFormat("en-US").format(price) +
-            " ETB";
-    }
-
-
-    function choosePlan(planId) {
-
-        const plan = plans[planId];
-
-        if (!plan) return;
-
-
-        selectedPlanId = planId;
-
-
-        const planName = $("selectedPlanName");
-        const planPrice = $("selectedPlanPrice");
-        const emailButton = $("emailPaymentButton");
-
-
-        if (planName) {
-            planName.textContent = plan.name;
-        }
-
-        if (planPrice) {
-            planPrice.textContent = formatPrice(plan.price);
-        }
-
-        if (emailButton) {
-            emailButton.disabled = false;
-        }
-
-
-        document.querySelectorAll(".plan-button").forEach(button => {
-
-            const selected =
-                button.dataset.plan === planId;
-
-
-            button.textContent = selected
-                ? "✓ Selected"
-                : getPlanButtonLabel(button.dataset.plan);
-
-
-            button.setAttribute(
-                "aria-pressed",
-                String(selected)
-            );
-        });
-
-
-        const paymentSection = $("payment");
-
-        if (paymentSection) {
-
-            paymentSection.scrollIntoView({
-                behavior: "smooth",
-                block: "start"
-            });
-        }
-    }
-
-
-    function getPlanButtonLabel(planId) {
-
-        const labels = {
-            monthly: "Select Monthly",
-            twoMonths: "Select 2 Months",
-            threeMonths: "Select 3 Months",
-            annual: "Select Annual"
-        };
-
-        return labels[planId] || "Select Plan";
-    }
-
-
-    document.querySelectorAll(".plan-button").forEach(button => {
-
-        button.addEventListener("click", function () {
-
-            choosePlan(button.dataset.plan);
-        });
+  if (button) {
+    button.addEventListener("click", () => {
+      naolOpenOfficialChannel(channel.id);
     });
+  }
+}
 
 
-    const headerPremiumButton = $("headerPremiumButton");
+/* =========================================================
+   5. OPEN OFFICIAL CHANNEL PAGE
+   ========================================================= */
 
+function naolOpenOfficialChannel(channelId) {
+  const channel = naolChannels.find(
+    (item) => item.id === channelId
+  );
 
-    if (headerPremiumButton) {
+  if (!channel || !channel.officialUrl) {
+    console.error("Official channel URL is unavailable.");
+    return;
+  }
 
-        headerPremiumButton.addEventListener(
-            "click",
-            function () {
+  try {
+    const url = new URL(channel.officialUrl);
 
-                const section = $("premium");
-
-                if (section) {
-
-                    section.scrollIntoView({
-                        behavior: "smooth"
-                    });
-                }
-            }
-        );
+    // Only allow HTTPS destinations.
+    if (url.protocol !== "https:") {
+      console.error("Blocked non-HTTPS channel URL.");
+      return;
     }
 
+    window.open(url.href, "_blank", "noopener,noreferrer");
 
-    /* ================================================
-       21. COPY PAYMENT NUMBER
-       ================================================ */
+  } catch (error) {
+    console.error("Invalid official channel URL:", error);
+  }
+}
 
-    const copyButton = $("copyPaymentNumber");
 
+/* =========================================================
+   6. PLAY CHANNEL
+   ========================================================= */
 
-    if (copyButton) {
+function naolPlayChannel(channelId) {
+  const channel = naolChannels.find(
+    (item) => item.id === channelId
+  );
 
-        copyButton.addEventListener(
-            "click",
-            async function () {
+  if (!channel) {
+    console.error("Channel not found:", channelId);
+    return;
+  }
 
-                try {
+  const videoPlayer = naolGetElement("videoPlayer");
+  const embedPlayer = naolGetElement("embedPlayer");
+  const playerTitle = naolGetElement("playerTitle");
+  const playerDescription = naolGetElement("playerDescription");
+  const playerStatus = naolGetElement("playerStatus");
+  const playerNotice = naolGetElement("playerNotice");
+  const videoContainer = naolGetElement("videoContainer");
 
-                    await navigator.clipboard.writeText(
-                        PAYMENT_NUMBER
-                    );
+  if (playerTitle) {
+    playerTitle.textContent = channel.name;
+  }
 
-                    copyButton.textContent = "Copied!";
+  if (playerDescription) {
+    playerDescription.textContent = channel.description;
+  }
 
-                } catch (error) {
+  if (playerStatus) {
+    playerStatus.textContent = "Opening channel...";
+  }
 
-                    window.prompt(
-                        "Copy Telebirr number:",
-                        PAYMENT_NUMBER
-                    );
-                }
-            }
-        );
+  if (videoContainer) {
+    videoContainer.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+  }
+
+  // Stop any previous HTML video.
+  if (videoPlayer) {
+    videoPlayer.pause();
+    videoPlayer.removeAttribute("src");
+    videoPlayer.load();
+    videoPlayer.style.display = "none";
+  }
+
+  /*
+    If a verified and authorized embed URL is configured,
+    display it inside the website.
+  */
+
+  if (channel.embedUrl) {
+    if (!embedPlayer) {
+      naolShowPlayerMessage(
+        channel,
+        "The player element is missing. Open the official channel below."
+      );
+
+      if (playerStatus) {
+        playerStatus.textContent = "Official channel available";
+      }
+
+      return;
     }
 
+    try {
+      const embedURL = new URL(channel.embedUrl);
 
-    /* ================================================
-       22. PAYMENT EMAIL
-       ================================================ */
+      if (embedURL.protocol !== "https:") {
+        throw new Error("Embed URL must use HTTPS.");
+      }
 
-    const emailPaymentButton = $("emailPaymentButton");
+      embedPlayer.src = embedURL.href;
+      embedPlayer.title = channel.name + " live stream";
+      embedPlayer.style.display = "block";
 
+      embedPlayer.setAttribute(
+        "allow",
+        "autoplay; encrypted-media; fullscreen; picture-in-picture"
+      );
 
-    if (emailPaymentButton) {
+      embedPlayer.setAttribute("allowfullscreen", "");
 
-        emailPaymentButton.addEventListener(
-            "click",
-            function () {
+      const placeholder = naolGetElement("playerPlaceholder");
 
-                if (!selectedPlanId) {
+      if (placeholder) {
+        placeholder.style.display = "none";
+      }
 
-                    alert(
-                        "Jalqaba subscription filadhu."
-                    );
+      if (playerStatus) {
+        playerStatus.textContent = "Loading player...";
+      }
 
-                    return;
-                }
+      if (playerNotice) {
+        playerNotice.textContent =
+          "If playback fails, the broadcaster may restrict embedding.";
+      }
 
+      return;
 
-                const plan = plans[selectedPlanId];
+    } catch (error) {
+      console.error("Embed setup failed:", error);
 
+      if (embedPlayer) {
+        embedPlayer.removeAttribute("src");
+        embedPlayer.style.display = "none";
+      }
 
-                const subject =
-                    "Naol Ethiopia TV Premium - " +
-                    plan.name;
+      naolShowPlayerMessage(
+        channel,
+        "Embed playback is unavailable. Use the official channel page."
+      );
 
+      if (playerStatus) {
+        playerStatus.textContent = "Official channel available";
+      }
 
-                const body = [
-                    "Hello Administrator,",
-                    "",
-                    "I request premium activation.",
-                    "",
-                    "Plan: " + plan.name,
-                    "Duration: " + plan.months + " month(s)",
-                    "Amount: " + formatPrice(plan.price),
-                    "Telebirr number: " + PAYMENT_NUMBER,
-                    "",
-                    "Please verify my payment.",
-                    "I will attach my payment screenshot manually.",
-                    "",
-                    "Account email or username:",
-                    "",
-                    "Transaction reference:",
-                    ""
-                ].join("\n");
-
-
-                const mailto =
-                    "mailto:" + PAYMENT_EMAIL +
-                    "?subject=" + encodeURIComponent(subject) +
-                    "&body=" + encodeURIComponent(body);
-
-
-                window.location.href = mailto;
-            }
-        );
+      return;
     }
+  }
+
+  /*
+    No verified embed URL:
+    Show a working official-page button instead of
+    the old "stream not configured" error.
+  */
+
+  if (embedPlayer) {
+    embedPlayer.removeAttribute("src");
+    embedPlayer.style.display = "none";
+  }
+
+  naolShowPlayerMessage(
+    channel,
+    "Tamsaasa kana fuula channel ofiisaa irratti ilaaluuf button armaan gadii tuqi."
+  );
+
+  if (playerStatus) {
+    playerStatus.textContent = "Official channel";
+  }
+
+  if (playerNotice) {
+    playerNotice.textContent =
+      "Embedded playback is not configured for this channel.";
+  }
+}
 
 
-    /* ================================================
-       23. FOOTER YEAR
-       ================================================ */
+/* =========================================================
+   7. CREATE CHANNEL CARD
+   ========================================================= */
 
-    const yearElement = $("currentYear");
+function naolCreateChannelCard(channel) {
+  const card = document.createElement("article");
 
-    if (yearElement) {
-        yearElement.textContent =
-            String(new Date().getFullYear());
-    }
+  card.className = "channel-card";
+  card.dataset.channelId = channel.id;
+  card.dataset.category = channel.category;
+
+  card.innerHTML = `
+    <div class="channel-card-logo">
+      ${naolEscapeHTML(channel.logo)}
+    </div>
+
+    <div class="channel-card-content">
+
+      <h3>${naolEscapeHTML(channel.name)}</h3>
+
+      <p>${naolEscapeHTML(channel.description)}</p>
+
+      <span class="channel-category-label">
+        ${naolEscapeHTML(channel.category)}
+      </span>
+
+      <button
+        type="button"
+        class="watch-button"
+        data-channel-id="${naolEscapeHTML(channel.id)}"
+      >
+        ▶ WATCH LIVE
+      </button>
+
+    </div>
+  `;
+
+  const watchButton = card.querySelector(".watch-button");
+
+  watchButton.addEventListener("click", () => {
+    naolPlayChannel(channel.id);
+  });
+
+  return card;
+}
 
 
-    /* ================================================
-       24. INITIALIZE WEBSITE
-       ================================================ */
+/* =========================================================
+   8. RENDER CHANNELS
+   ========================================================= */
 
-    renderChannels();
+function naolRenderChannels(channelList = naolChannels) {
+  const grid = naolGetElement("channelGrid");
+  const emptyState = naolGetElement("emptyState");
 
-    setStatus("READY");
-
-    showNotice(
-        "TV barbaadde filadhu. Tamsaasa hin galfamneef " +
-        "button Watch TV fuula ofiisaa bana."
+  if (!grid) {
+    console.error(
+      'HTML element "channelGrid" hin jiru. index.html keessatti ID kana mirkaneessi.'
     );
 
-    console.log(
-        "Naol Ethiopia TV Live initialized successfully."
-    );
+    return;
+  }
 
-});
+  grid.replaceChildren();
+
+  if (channelList.length === 0) {
+    if (emptyState) {
+      emptyState.style.display = "block";
+    }
+
+    return;
+  }
+
+  if (emptyState) {
+    emptyState.style.display = "none";
+  }
+
+  const fragment = document.createDocumentFragment();
+
+  channelList.forEach((channel) => {
+    fragment.appendChild(
+      naolCreateChannelCard(channel)
+    );
+  });
+
+  grid.appendChild(fragment);
+}
+
+
+/* =========================================================
+   9. SEARCH AND CATEGORY FILTER
+   ========================================================= */
+
+function naolFilterChannels() {
+  const searchInput = naolGetElement("channelSearch");
+  const categorySelect = naolGetElement("channelCategory");
+
+  const searchText = searchInput
+    ? searchInput.value.trim().toLowerCase()
+    : "";
+
+  const selectedCategory = categorySelect
+    ? categorySelect.value
+    : "all";
+
+  const filteredChannels = naolChannels.filter((channel) => {
+    const matchesSearch =
+      channel.name.toLowerCase().includes(searchText) ||
+      channel.description.toLowerCase().includes(searchText) ||
+      channel.category.toLowerCase().includes(searchText);
+
+    const matchesCategory =
+      selectedCategory === "all" ||
+      channel.category.toLowerCase() ===
+        selectedCategory.toLowerCase();
+
+    return matchesSearch && matchesCategory;
+  });
+
+  naolRenderChannels(filteredChannels);
+}
+
+
+/* =========================================================
+   10. FULLSCREEN PLAYER
+   ========================================================= */
+
+function naolToggleFullscreen() {
+  const container = naolGetElement("videoContainer");
+
+  if (!container) {
+    alert("Player container hin argamne.");
+    return;
+  }
+
+  if (!document.fullscreenElement) {
+    if (container.requestFullscreen) {
+      container.requestFullscreen().catch((error) => {
+        console.error("Fullscreen error:", error);
+      });
+    } else {
+      alert("Fullscreen browser kana irratti hin deeggaramu.");
+    }
+
+  } else if (document.exitFullscreen) {
+    document.exitFullscreen();
+  }
+}
+
+
+/* =========================================================
+   11. ROTATE SCREEN
+   ========================================================= */
+
+async function naolRotateScreen() {
+  try {
+    if (screen.orientation && screen.orientation.lock) {
+      await screen.orientation.lock("landscape");
+    } else {
+      alert(
+        "Rotation lock browser kana irratti hin deeggaramu. Bilbila kee gara landscape geeddari."
+      );
+    }
+
+  } catch (error) {
+    console.warn("Screen rotation could not be locked:", error);
+
+    alert(
+      "Browser ykn bilbilli kee rotation lock hin hayyamne. Bilbila kee harkaan gara landscape geeddari."
+    );
+  }
+}
+
+
+/* =========================================================
+   12. INITIALIZE WEBSITE
+   ========================================================= */
+
+function naolInitializeTV() {
+  // Render all 20 channels.
+  naolRenderChannels();
+
+  // Search input.
+  const searchInput = naolGetElement("channelSearch");
+
+  if (searchInput) {
+    searchInput.addEventListener(
+      "input",
+      naolFilterChannels
+    );
+  }
+
+  // Category dropdown.
+  const categorySelect = naolGetElement("channelCategory");
+
+  if (categorySelect) {
+    categorySelect.addEventListener(
+      "change",
+      naolFilterChannels
+    );
+  }
+
+  // Fullscreen button.
+  const fullscreenButton = naolGetElement("fullscreenButton");
+
+  if (fullscreenButton) {
+    fullscreenButton.addEventListener(
+      "click",
+      naolToggleFullscreen
+    );
+  }
+
+  // Rotate button.
+  const rotateButton = naolGetElement("rotateButton");
+
+  if (rotateButton) {
+    rotateButton.addEventListener(
+      "click",
+      naolRotateScreen
+    );
+  }
+
+  // Current year, if the footer has this element.
+  const currentYear = naolGetElement("currentYear");
+
+  if (currentYear) {
+    currentYear.textContent = new Date().getFullYear();
+  }
+
+  console.log(
+    "Naol Ethiopia TV Live initialized:",
+    naolChannels.length,
+    "channels loaded."
+  );
+}
+
+
+/* =========================================================
+   13. START
+   ========================================================= */
+
+if (document.readyState === "loading") {
+  document.addEventListener(
+    "DOMContentLoaded",
+    naolInitializeTV
+  );
+} else {
+  naolInitializeTV();
+}
